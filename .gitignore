@@ -1,0 +1,4 @@
+*.class
+*.owl
+/bin/
+/target/
