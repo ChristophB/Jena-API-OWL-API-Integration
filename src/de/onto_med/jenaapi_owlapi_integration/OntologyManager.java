@@ -35,8 +35,7 @@ public class OntologyManager {
 	 */
 	public OntologyManager(String path, String iri, Boolean overwrite) {
 		this.path = path;
-		if (!iri.matches("#$")) iri += "#";
-		this.iri  = iri;
+		this.iri  = iri + (iri.matches(".*#$") ? "" : "#");
 		
 		model = ModelFactory.createOntologyModel();
 		
@@ -60,7 +59,7 @@ public class OntologyManager {
 	 * @param iri Ontology IRI
 	 */
 	public OntologyManager(String path, String iri) {
-		new OntologyManager(path, iri, false);
+		this(path, iri, false);
 	}
 	
 	/**
