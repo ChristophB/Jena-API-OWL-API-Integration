@@ -8,6 +8,7 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -26,24 +27,56 @@ public class OntologyManager {
 	private String iri;
 	private OntModel model;
 	
-	public OntologyManager(String path, String iri) {
+	/**
+	 * Creates a new Ontology Manager.
+	 * @param path OWL file path
+	 * @param iri Ontology IRI
+	 * @param overwrite overwrites the file if true
+	 */
+	public OntologyManager(String path, String iri, Boolean overwrite) {
 		this.path = path;
+		if (!iri.matches("#$")) iri += "#";
 		this.iri  = iri;
 		
 		model = ModelFactory.createOntologyModel();
 		
-		if (new File(path).exists()) {
+		File file = new File(path);
+		if (file.exists() && !overwrite) {
 			System.out.println("Appending data to existing output file.");
 			model.read(FileManager.get().open(path), null);
 		} else {
 			model.createOntology(iri);
 		}
+		
+		if (file.exists() && overwrite) {
+			System.out.println("Overwriting existing output file.");
+			file.delete();
+		}
 	}
 	
+	/**
+	 * Creates a new Ontology Manager.
+	 * @param path OWL file path
+	 * @param iri Ontology IRI
+	 */
+	public OntologyManager(String path, String iri) {
+		new OntologyManager(path, iri, false);
+	}
+	
+	/**
+	 * Returns the jena API OntModel.
+	 * @return OntModel
+	 */
 	public OntModel getModel() {
 		return model;
 	}
 	
+	/**
+	 * Saves the Ontology with OWLAPI in the specified location.
+	 * @throws OWLOntologyCreationException
+	 * @throws OWLOntologyStorageException
+	 * @throws FileNotFoundException
+	 */
 	public void save() throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		File file = new File(path);
 		FileOutputStream stream = new FileOutputStream(file);
@@ -58,6 +91,6 @@ public class OntologyManager {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(file);
 		
-		manager.saveOntology(ontology);
+		manager.saveOntology(ontology, new RDFXMLDocumentFormat());
 	}
 }
