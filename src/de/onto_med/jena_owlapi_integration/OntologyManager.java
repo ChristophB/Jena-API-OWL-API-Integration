@@ -1,4 +1,4 @@
-package de.onto_med.jenaapi_owlapi_integration;
+package de.onto_med.jena_owlapi_integration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,12 +44,11 @@ public class OntologyManager {
 			System.out.println("Appending data to existing output file.");
 			model.read(FileManager.get().open(path), null);
 		} else {
+			if (file.exists() && overwrite) {
+				System.out.println("Overwriting existing output file.");
+				file.delete();
+			}
 			model.createOntology(iri);
-		}
-		
-		if (file.exists() && overwrite) {
-			System.out.println("Overwriting existing output file.");
-			file.delete();
 		}
 	}
 	
