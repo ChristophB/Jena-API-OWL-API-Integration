@@ -2,3 +2,8 @@
 *.owl
 /bin/
 /target/
+.idea
+*.iml
+.settings
+.project
+.classpath
