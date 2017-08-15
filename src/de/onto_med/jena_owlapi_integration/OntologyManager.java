@@ -71,9 +71,9 @@ public class OntologyManager {
 	
 	/**
 	 * Saves the Ontology with OWLAPI in the specified location.
-	 * @throws OWLOntologyCreationException
-	 * @throws OWLOntologyStorageException
-	 * @throws FileNotFoundException
+	 * @throws OWLOntologyCreationException If OWLAPI could not create ontology manager.
+	 * @throws OWLOntologyStorageException If saving the ontology failed.
+	 * @throws FileNotFoundException If no file was found for given path.
 	 */
 	public void save() throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		File file = new File(path);
