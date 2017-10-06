@@ -1,4 +1,9 @@
 *.class
 *.owl
-/bin/
-/target/
+bin/
+target/
+*.iml
+.settings/
+.project
+.classpath
+.idea/
